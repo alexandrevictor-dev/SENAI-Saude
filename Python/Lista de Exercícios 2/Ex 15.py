@@ -25,9 +25,4 @@ if salarioLiq <= 350:
 else:
     salarioLiq = salarioLiq + 50
 
-print(f"Salário a receber: {salarioLiq:.2f}")
-
-
-                  
-                  
-                   
+print(f"Salário a receber: {salarioLiq:.2f}") 
