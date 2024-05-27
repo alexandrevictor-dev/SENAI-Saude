@@ -1,8 +1,18 @@
-#Não entendi o enunciado, pode desconsiderar.
-salario = float(1000) #em 2020
-print(salario)
-salario = salario + (salario* 0.015) #a partir de 2021
-print(salario)
-salario = salario + (salario* 0.045)#A partir de 2022
+salarioIn = 1000
+anoIn = 2020
+anoFim = 2024
+perc = 1.5
+salarioAt = salarioIn
 
-print(f"Novo salário: {salario}")
+print(f"Em 2020 o Salário foi de: R${salarioAt}")
+
+for ano in range(anoIn+1, anoFim+1):
+    if ano == 2021:
+        aumento = salarioAt * (perc/100)
+
+    else:
+        perc = perc*2
+        aumento = salarioAt * (perc/100)
+
+    salarioAt += aumento
+    print(f"Em {ano} o Salário foi de: R${salarioAt:.2f}")
