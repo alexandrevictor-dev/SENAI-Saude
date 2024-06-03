@@ -1,5 +1,5 @@
 lanche = ("hamburger","suco","pizza","pudim")
-#tuplas são IMUTÁVEIS!
+#tuplas são IMUTÁVEIS! ou seja, não pode ter seus valores substituídos
 
 #mostra o valor que eu mencionar (lembrando que sempre começa com 0, ou seja: hamburger =0, suco =1)
 print(lanche[1])
