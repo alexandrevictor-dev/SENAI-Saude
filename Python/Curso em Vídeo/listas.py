@@ -1,4 +1,3 @@
-import os
 #listas são mutáveis! posso mudar seus valores
 #tupla()  x  lista[]
 num = [2, 5, 9, 1]
