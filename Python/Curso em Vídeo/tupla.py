@@ -9,6 +9,18 @@ print("----------")
 print(lanche[1:3])
 print("----------")
 
+#mostra do elemento escolhido até o final
+lanche[2:]
+
+#mostra do início até o elemento escolhido
+lanche[:2]
+
+#mostra os elementos começando pelo final
+lanche[-2]
+
+#em ordem alfabética
+print(sorted(lanche))
+
 #para mostrar os itens listados
 for c in lanche:
     print(c)
