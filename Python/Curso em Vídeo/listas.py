@@ -48,7 +48,7 @@ for c in num:
 for v, c in enumerate(num):
     print(f"Na posição {v} há o valor {c}")
 print("Fim da lista")
-#usuário adiciona valores
+#usuário adiciona valores #Sempre começar declarando a variável como lista vazia ex: num = []
 for cont in range(0,3):
     num.append(int(input("Digite o valor")))
 
