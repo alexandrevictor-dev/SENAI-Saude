@@ -1,3 +1,5 @@
+import mysql.connector
+
 # instalar o msql: pip install mysql-connector-python
 # importando biblioteca
 import mysql.connector
@@ -9,7 +11,7 @@ try:  # tratar excessões e erros do programa, traz exatamente os erros
 
 # if conexao.is_connected():
 # print("Conexão Realizada")
- #tenho
+ # tenho
 # Assim como o If e Else, o Exception é o "Else", se algo der ruim no try, ele pula pro Exception.
 except Exception as e:
     print("Erro: ", e)

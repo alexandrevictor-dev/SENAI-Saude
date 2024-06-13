@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 12/06/2024 às 17:44
+-- Tempo de geração: 13/06/2024 às 02:06
 -- Versão do servidor: 10.4.28-MariaDB
 -- Versão do PHP: 8.2.4
 
@@ -85,16 +85,17 @@ CREATE TABLE `medico` (
 --
 
 INSERT INTO `medico` (`ID`, `CPF`, `RG`, `NOME`, `ENDERECO`, `EMAIL`, `CEP`, `CRM`, `ESP_MEDICA`, `DT_NASC`, `DT_ADMISSAO`, `DT_DESLIGAMENTO`) VALUES
-(51, '12345678901', '123456789', 'Dr. João Almeida', 'Rua das Acácias, 123 - Centro', 'joao.almeida@hospital.com', '12345000', 'CRM001', 1, '1970-05-10', '2000-01-15', NULL),
-(52, '23456789012', '234567890', 'Dra. Ana Santos', 'Avenida Paulista, 456 - Bela Vista', 'ana.santos@hospital.com', '12346000', 'CRM002', 2, '1980-06-20', '2005-03-20', NULL),
-(53, '34567890123', '345678901', 'Dr. Carlos Pereira', 'Rua das Flores, 789 - Jardim das Rosas', 'carlos.pereira@hospital.com', '12347000', 'CRM003', 3, '1990-07-30', '2010-05-10', NULL),
-(54, '45678901234', '456789012', 'Dra. Fernanda Oliveira', 'Avenida Brasil, 101 - Zona Sul', 'fernanda.oliveira@hospital.com', '12348000', 'CRM004', 4, '1985-08-15', '2012-11-25', NULL),
-(55, '56789012345', '567890123', 'Dr. Ricardo Mendes', 'Rua das Palmeiras, 202 - Alto da Boa Vista', 'ricardo.mendes@hospital.com', '12349000', 'CRM005', 5, '1975-09-25', '1999-09-01', NULL),
-(56, '67890123456', '678901234', 'Dra. Mariana Lopes', 'Rua do Catete, 303 - Flamengo', 'mariana.lopes@hospital.com', '12350000', 'CRM006', 6, '1988-10-30', '2015-02-14', '2019-08-01'),
-(57, '78901234567', '789012345', 'Dr. Pedro Henrique', 'Avenida Atlântica, 404 - Copacabana', 'pedro.henrique@hospital.com', '12351000', 'CRM007', 1, '1982-11-10', '2008-07-20', '2021-05-10'),
-(58, '89012345678', '890123456', 'Dra. Gabriela Santos', 'Rua São Clemente, 505 - Botafogo', 'gabriela.santos@hospital.com', '12352000', 'CRM008', 2, '1978-12-15', '2003-10-05', '2020-01-01'),
-(59, '90123456789', '901234567', 'Dr. Lucas Rocha', 'Rua da Lapa, 606 - Lapa', 'lucas.rocha@hospital.com', '12353000', 'CRM009', 3, '1984-01-20', '2011-06-18', NULL),
-(60, '01234567890', '012345678', 'Dra. Camila Almeida', 'Rua das Camélias, 707 - Barra da Tijuca', 'camila.almeida@hospital.com', '12354000', 'CRM010', 4, '1992-02-28', '2018-08-22', NULL);
+(51, '12345678901', '123456789', 'Dr. João Almeida', 'Rua das Acácias, 123 - Centro', 'joao.almeida@hospital.com', '12345000', '159753/RJ', 1, '1970-05-10', '2000-01-15', NULL),
+(52, '23456789012', '234567890', 'Dra. Ana Santos', 'Avenida Paulista, 456 - Bela Vista', 'ana.santos@hospital.com', '12346000', '252012/RJ', 2, '1980-06-20', '2005-03-20', NULL),
+(53, '34567890123', '345678901', 'Dr. Carlos Pereira', 'Rua das Flores, 789 - Jardim das Rosas', 'carlos.pereira@hospital.com', '12347000', '362514/MG', 3, '1990-07-30', '2010-05-10', NULL),
+(54, '45678901234', '456789012', 'Dra. Fernanda Oliveira', 'Avenida Brasil, 101 - Zona Sul', 'fernanda.oliveira@hospital.com', '12348000', '968210/ES', 4, '1985-08-15', '2012-11-25', NULL),
+(55, '56789012345', '567890123', 'Dr. Ricardo Mendes', 'Rua das Palmeiras, 202 - Alto da Boa Vista', 'ricardo.mendes@hospital.com', '12349000', '478123/SP', 5, '1975-09-25', '1999-09-01', NULL),
+(56, '67890123456', '678901234', 'Dra. Mariana Lopes', 'Rua do Catete, 303 - Flamengo', 'mariana.lopes@hospital.com', '12350000', '574584/RJ', 6, '1988-10-30', '2015-02-14', '2019-08-01'),
+(57, '78901234567', '789012345', 'Dr. Pedro Henrique', 'Avenida Atlântica, 404 - Copacabana', 'pedro.henrique@hospital.com', '12351000', '800145/RJ', 1, '1982-11-10', '2008-07-20', '2021-05-10'),
+(58, '89012345678', '890123456', 'Dra. Gabriela Santos', 'Rua São Clemente, 505 - Botafogo', 'gabriela.santos@hospital.com', '12352000', '741236/RJ', 2, '1978-12-15', '2003-10-05', '2020-01-01'),
+(59, '90123456789', '901234567', 'Dr. Lucas Rocha', 'Rua da Lapa, 606 - Lapa', 'lucas.rocha@hospital.com', '12353000', '963852/PE', 3, '1984-01-20', '2011-06-18', NULL),
+(60, '01234567890', '012345678', 'Dra. Camila Almeida', 'Rua das Camélias, 707 - Barra da Tijuca', 'camila.almeida@hospital.com', '12354000', '643197/RJ', 4, '1992-02-28', '2018-08-22', NULL),
+(61, '25825885222', '789632147', 'DORIVAL PYCH', 'Av. Canal, 5', 'dorivaldopycharm@hotmail.com', '24456656', '757512/SC', 3, '1999-02-02', '2023-03-03', NULL);
 
 -- --------------------------------------------------------
 
@@ -173,7 +174,7 @@ ALTER TABLE `consulta`
 -- AUTO_INCREMENT de tabela `medico`
 --
 ALTER TABLE `medico`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT de tabela `paciente`
