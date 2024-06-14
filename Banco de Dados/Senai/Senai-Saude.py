@@ -1,7 +1,6 @@
 import mysql.connector  # importando biblioteca
-import os  # Biblioteca de limpar dela
-import time
 from dic import generos, especialidades
+from nav_padrao import limpar_tela, delay
 
 try:  # tratar excessões e erros do programa, traz exatamente os erros
     conexao = mysql.connector.connect(host='localhost', user='root', password='', database='senai_saude') #Conectar no banco
@@ -16,7 +15,7 @@ except Exception as e:
 
 print("-=-= SENAI SAÚDE =-=-")
 op_menu = int(input("1. Cadastrar Paciente\n2. Cadastrar Médico\n3. Cadastrar Consulta\n0. Encerrar\n\nEscolha uma opção: "))
-os.system("cls")  # Limpa tela
+limpar_tela()  # Limpa tela
 
 match op_menu:  # match= aponta pra uma variável, igual Escolha/Caso
     case 1:
@@ -56,8 +55,8 @@ match op_menu:  # match= aponta pra uma variável, igual Escolha/Caso
 
                     if chave_genero not in generos:
                         print("Opção Inválida!")
-                        time.sleep(2)
-                        os.system("cls")
+                        delay()
+                        limpar_tela()
 
                     else:
                         break
@@ -92,7 +91,7 @@ match op_menu:  # match= aponta pra uma variável, igual Escolha/Caso
 
         if len(resultado) != 0:
             print("CRM já cadastrado em outro médico!")
-            time.sleep(2)
+            delay()
 
         else:
             rg = input("RG: ")
@@ -103,7 +102,7 @@ match op_menu:  # match= aponta pra uma variável, igual Escolha/Caso
 
             if len(resultado) != 0:
                 print("RG já cadastrado em outro médico!")
-                time.sleep(2)
+                delay()
 
             else:
 
@@ -115,7 +114,7 @@ match op_menu:  # match= aponta pra uma variável, igual Escolha/Caso
 
                 if len(resultado) != 0:
                     print("CPF já cadastrado em outro médico!")
-                    time.sleep(2)
+                    delay()
 
                 else:
 
@@ -133,8 +132,8 @@ match op_menu:  # match= aponta pra uma variável, igual Escolha/Caso
 
                         if chave_esp_medica not in especialidades:
                             print("Opção Inválida!")
-                            time.sleep(2)
-                            os.system("cls")
+                            delay()
+                            limpar_tela()
 
                         else:
                             break
