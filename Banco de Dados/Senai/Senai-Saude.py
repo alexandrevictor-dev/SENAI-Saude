@@ -1,8 +1,10 @@
 import mysql.connector  # importando biblioteca
 import os  # Biblioteca de limpar dela
+import time
+from dic import generos, especialidades
+
 try:  # tratar excessões e erros do programa, traz exatamente os erros
-    conexao = mysql.connector.connect(
-        host='localhost', user='root', password='', database='senai_saude')
+    conexao = mysql.connector.connect(host='localhost', user='root', password='', database='senai_saude') #Conectar no banco
     cursor = conexao.cursor()
 
 # if conexao.is_connected():
@@ -13,8 +15,7 @@ except Exception as e:
     print("Erro: ", e)
 
 print("-=-= SENAI SAÚDE =-=-")
-op_menu = int(input(
-    "1. Cadastrar Paciente\n2. Cadastrar Médico\n3. Cadastrar Consulta\n0. Encerrar\n\nEscolha uma opção: "))
+op_menu = int(input("1. Cadastrar Paciente\n2. Cadastrar Médico\n3. Cadastrar Consulta\n0. Encerrar\n\nEscolha uma opção: "))
 os.system("cls")  # Limpa tela
 
 match op_menu:  # match= aponta pra uma variável, igual Escolha/Caso
@@ -24,11 +25,9 @@ match op_menu:  # match= aponta pra uma variável, igual Escolha/Caso
 
         sql = "SELECT ID FROM PACIENTE WHERE CPF = %s"
         cursor.execute(sql, (cpf,))
-        # retorna para resultado; todas as linhas retornadas pela execução da query
-        resultado = cursor.fetchall()
+        resultado = cursor.fetchall() #retorna para resultado; todas as linhas retornadas pela execução da query
 
-        # se o tamanho da lista retornada para o banco for diferente de 0:
-        if len(resultado) != 0:
+        if len(resultado) != 0:  # se o tamanho da lista retornada para o banco for diferente de 0:
             print("CPF já cadastrado para outro paciente.")
 
         else:
@@ -38,7 +37,7 @@ match op_menu:  # match= aponta pra uma variável, igual Escolha/Caso
             cursor.execute(sql, (rg,))
             resultado = cursor.fetchall()
 
-            if len(resultado) != 0:
+            if len(resultado) !=0:
                 print("RG já cadastrado para outr paciente.")
 
             else:
@@ -47,11 +46,25 @@ match op_menu:  # match= aponta pra uma variável, igual Escolha/Caso
                 endereco = input("Endereço: ")
                 cep = input("CEP: ")
                 dt_nasc = input("Data de Nascimento: ")
-                genero = int(input("Gênero: "))
+
+                while True:
+                    print("\nGênero: ")
+                    for chave, valor in generos.items():
+                        print(f"{chave} - {valor}")
+
+                    chave_genero = int(input("\nEscolha uma opção: "))
+
+                    if chave_genero not in generos:
+                        print("Opção Inválida!")
+                        time.sleep(2)
+                        os.system("cls")
+
+                    else:
+                        break
+
                 telefone = input("Telefone: ")
                 email = input("E-mail: ")
-                responsavel = input(
-                    "O paciente necessita de um responsável(S/N)? ")
+                responsavel = input("O paciente necessita de um responsável(S/N)? ")
                 if responsavel.upper() == 'S':
                     responsavel = input("Digite o nome do responsável: ")
                 else:
@@ -59,7 +72,7 @@ match op_menu:  # match= aponta pra uma variável, igual Escolha/Caso
 
                 sql = '''INSERT INTO paciente (CPF, RG, NOME, ENDERECO, CEP, DT_NASC, GENERO, TELEFONE, EMAIL, RESPONSAVEL) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
                 valores = (cpf, rg, nome, endereco, cep, dt_nasc,
-                           genero, telefone, email, responsavel)
+                           chave_genero, telefone, email, responsavel)
 
                 try:
                     cursor.execute(sql, valores)
@@ -72,34 +85,77 @@ match op_menu:  # match= aponta pra uma variável, igual Escolha/Caso
     case 2:
         print("-=-= CADASTRO DE MÉDICO =-=-\n")
         crm = input("CRM: ")
-        nome = input("Nome: ")
-        rg = input("RG: ")
-        cpf = input("CPF: ")
-        email = input("E-mail: ")
-        endereco = input("Endereço: ")
-        cep = input("CEP: ")
-        esp_medica = int(input("Especialidade Médica: "))
-        dt_nasc = input("Data de nascimento: ")
-        dt_admissao = input("Data de admissão: ")
 
-        dt_desligamento = input("O Médico continua ativo?(S/N): ")
-        if dt_desligamento.upper() == "S":
-            dt_desligamento = None
+        sql= "SELECT ID FROM MEDICO WHERE CRM = %s"
+        cursor.execute(sql, (crm,))
+        resultado = cursor.fetchall()
+
+        if len(resultado) != 0:
+            print("CRM já cadastrado em outro médico!")
+            time.sleep(2)
+
         else:
-            dt_desligamento = input("Informe a data de desligamento: 2")
+            rg = input("RG: ")
 
-        sql = '''INSERT INTO medico (CRM, NOME, RG, CPF, EMAIL, ENDERECO, CEP, ESP_MEDICA, DT_NASC, DT_ADMISSAO)   
-                               VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
-        valores = (crm, nome, rg, cpf, email, endereco,
-                   cep, esp_medica, dt_nasc, dt_admissao)
+            sql = "SELECT ID FROM MEDICO WHERE RG = %s"
+            cursor.execute(sql, (rg,))
+            resultado = cursor.fetchall()
 
-        try:
-            cursor.execute(sql, valores)
-            conexao.commit()  # Confirmar a transação no SGBD
-            print(f"Médico {nome} cadastrado com sucesso!")
+            if len(resultado) != 0:
+                print("RG já cadastrado em outro médico!")
+                time.sleep(2)
 
-        except Exception as e:
-            print(f"Erro: {e}")
+            else:
+
+                cpf = input("CPF: ")
+
+                sql = "SELECT ID FROM MEDICO WHERE CPF = %s"
+                cursor.execute(sql, (cpf,))
+                resultado = cursor.fetchall()
+
+                if len(resultado) != 0:
+                    print("CPF já cadastrado em outro médico!")
+                    time.sleep(2)
+
+                else:
+
+                    nome = input("Nome: ")
+                    email = input("E-mail: ")
+                    endereco = input("Endereço: ")
+                    cep = input("CEP: ")
+
+                    while True:
+                        print("\nEspecialidade Médica: ")
+                        for chave, valor in especialidades.items():
+                            print(f"{chave} - {valor}")
+
+                        chave_esp_medica = int(input("\nEscolha uma opção: "))
+
+                        if chave_esp_medica not in especialidades:
+                            print("Opção Inválida!")
+                            time.sleep(2)
+                            os.system("cls")
+
+                        else:
+                            break
+
+                    dt_nasc = input("Data de nascimento: ")
+                    dt_admissao = input("Data de admissão: ")
+                    dt_desligamento = None
+
+
+                    sql = '''INSERT INTO medico (CRM, NOME, RG, CPF, EMAIL, ENDERECO, CEP, ESP_MEDICA, DT_NASC, DT_ADMISSAO)   
+                                           VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
+                    valores = (crm, nome, rg, cpf, email, endereco, cep, chave_esp_medica, dt_nasc, dt_admissao)
+
+                    try:
+                        cursor.execute(sql, valores)
+                        conexao.commit()  # Confirmar a transação no SGBD
+                        print(f"Médico {nome} cadastrado com sucesso!")
+
+                    except Exception as e:
+                        print(f"Erro: {e}")
+
 
     case _:  # DEFAULT = ELSE
         print("Opção Inválida")
