@@ -1,4 +1,6 @@
 from nav_padrao import limpar_tela, delay
+from tabulate import tabulate
+from IPython.core.display_functions import display
 
 def cadastrar_consulta(conexao, cursor):
     print("-=-= CADASTRO DE CONSULTA =-=-\n")
@@ -70,7 +72,6 @@ def cadastrar_consulta(conexao, cursor):
 
                         # INSERIR ESTRUTURA TRY-EXCEPT
 
-
 def excluir_consulta(conexao, cursor):
     print("-=-= EXCLUSÃO DE CONSULTA =-=-\n")
     cod_consulta = input("Código da Consulta: ")
@@ -106,3 +107,81 @@ def excluir_consulta(conexao, cursor):
 
     except Exception as e:
         print("Erro ", e)
+
+def visualizar_todas_consultas(cursor):
+    try:
+        sql = '''SELECT 
+            CONSULTA.COD_CONSULTA, 
+            CONSULTA.DT_CONSULTA, 
+            CONSULTA.HR_CONSULTA, 
+            CONSULTA.VR_CONSULTA, 
+            MEDICO.NOME AS MEDICO,
+            PACIENTE.NOME AS PACIENTE
+            
+            FROM CONSULTA
+            
+            INNER JOIN MEDICO ON CONSULTA.ID_MEDICO = MEDICO.ID
+            INNER JOIN PACIENTE ON CONSULTA.ID_PACIENTE = PACIENTE.ID
+            
+            ORDER BY DT_CONSULTA, HR_CONSULTA'''
+        cursor.execute(sql)
+        resultado = cursor.fetchall()
+
+        if len(resultado) == 0:
+            print("Não há consultas cadastradas no Sistema!")
+            delay()
+
+        else:
+            resultados = []
+
+            for item in resultado:
+                item = list(item)
+                resultados.append(item)
+
+            colunas = ['Cód. Consulta', 'DT Consulta', 'Hr Consulta', 'Vr Consulta', 'Médico', 'Paciente']
+            tabela = tabulate(resultados, headers=colunas, tablefmt='grid')
+            display(tabela)
+            input("\nPressione Enter para continuar...")
+
+    except Exception as e:
+        print("Erro: ", e)
+
+def consultar_por_codigo(cursor):
+    codigo_procurado = input("Código da Consulta: ")
+    try:
+        sql = '''SELECT 
+                    CONSULTA.COD_CONSULTA, 
+                    CONSULTA.DT_CONSULTA, 
+                    CONSULTA.HR_CONSULTA, 
+                    CONSULTA.VR_CONSULTA, 
+                    MEDICO.NOME AS MEDICO,
+                    PACIENTE.NOME AS PACIENTE
+
+
+                    FROM CONSULTA
+                    
+                    INNER JOIN MEDICO ON CONSULTA.ID_MEDICO = MEDICO.ID
+                    INNER JOIN PACIENTE ON CONSULTA.ID_PACIENTE = PACIENTE.ID
+                    
+                    WHERE CONSULTA.COD_CONSULTA = %s'''
+        cursor.execute(sql,(codigo_procurado,))
+        resultado = cursor.fetchall()
+
+        if len(resultado) == 0:
+            print("Consulta não encontrada!")
+            delay()
+
+        else:
+            resultados = []
+
+            for item in resultado:
+                item = list(item)
+                resultados.append(item)
+
+            colunas = ['Cód. Consulta', 'DT Consulta', 'Hr Consulta', 'Vr Consulta', 'Médico', 'Paciente']
+            tabela = tabulate(resultados, headers=colunas, tablefmt='grid')
+            display(tabela)
+            input("\nPressione Enter para continuar...")
+
+    except Exception as e:
+        print("Erro: ", e)

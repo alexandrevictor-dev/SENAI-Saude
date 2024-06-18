@@ -1,5 +1,7 @@
 from dic import especialidades
 from nav_padrao import limpar_tela, delay
+from tabulate import tabulate
+from IPython.core.display_functions import display
 
 
 def cadastrar_medico(conexao, cursor):
@@ -112,3 +114,60 @@ def excluir_medico(conexao, cursor):
                 delay()
     except Exception as e:
         print("Erro ", e)
+
+
+def consultar_todos_medicos(cursor):
+    try:
+        sql = '''SELECT CRM, NOME, RG, CPF, EMAIL, ENDERECO, CEP, ESP_MEDICA, DT_NASC, DT_ADMISSAO, DT_DESLIGAMENTO, STATUS_MEDICO 
+        FROM MEDICO
+        ORDER BY NOME ASC'''
+        cursor.execute(sql)
+        resultado = cursor.fetchall()
+
+        if len(resultado) == 0:
+            print("Não há médicos cadastrados no Sistema!")
+            delay()
+
+        else:
+            resultados = []
+
+            for item in resultado:
+                item = list(item)
+                resultados.append(item)
+
+            colunas = ['CRM', 'NOME', 'RG', 'CPF', 'E-MAIL', 'ENDEREÇO', 'CEP', 'ESPECIALIDADE', 'DATA NASCIMENTO','DATA ADMISSÃO','DATA DESLIGAMENTO', 'STATUS MÉDICO']
+            tabela = tabulate(resultados, headers=colunas, tablefmt='grid')
+            display(tabela)
+            input("\nPressione Enter para continuar...")
+
+    except Exception as e:
+        print("Erro: ", e)
+
+
+def consultar_por_crm(cursor):
+    crm_procurado = input("CRM: ")
+    try:
+        sql = '''SELECT CRM, NOME, RG, CPF, EMAIL, ENDERECO, CEP, ESP_MEDICA, DT_NASC, DT_ADMISSAO, DT_DESLIGAMENTO, STATUS_MEDICO 
+                        FROM MEDICO
+                    WHERE CRM = %s'''
+        cursor.execute(sql,(crm_procurado,))
+        resultado = cursor.fetchall()
+
+        if len(resultado) == 0:
+            print("Médico não encontrado!")
+            delay()
+
+        else:
+            resultados = []
+
+            for item in resultado:
+                item = list(item)
+                resultados.append(item)
+
+            colunas = ['CRM', 'NOME', 'RG', 'CPF', 'E-MAIL', 'ENDEREÇO', 'CEP', 'ESPECIALIDADE', 'DATA NASCIMENTO','DATA ADMISSÃO','DATA DESLIGAMENTO', 'STATUS MÉDICO']
+            tabela = tabulate(resultados, headers=colunas, tablefmt='grid')
+            display(tabela)
+            input("\nPressione Enter para continuar...")
+
+    except Exception as e:
+        print("Erro: ", e)

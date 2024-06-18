@@ -22,7 +22,7 @@ def cadastrar_paciente(conexao, cursor):
         resultado = cursor.fetchall()
 
         if len(resultado) != 0:
-            print("RG já cadastrado para outr paciente.")
+            print("RG já cadastrado para outro paciente.")
 
         else:
 
@@ -118,9 +118,42 @@ def consultar_todos_pacientes(cursor):
 
             for item in resultado:
                 item = list(item)
+
+                chave_genero = item[6]
+                item[6] = generos.get(chave_genero)
+
                 resultados.append(item)
 
             colunas = ['CPF','RG', 'NOME', 'ENDEREÇO', 'CEP', 'DT NASCIMENTO', 'GÊNERO', 'TELEFONE', 'E-MAIL', 'RESPONSÁVEL']
+            tabela = tabulate(resultados, headers=colunas, tablefmt='grid')
+            display(tabela)
+            input("\nPressione Enter para continuar...")
+
+    except Exception as e:
+        print("Erro: ", e)
+
+def consultar_por_cpf(cursor):
+    cpf_procurado = input("CPF: ")
+    try:
+        sql = '''SELECT 
+            CPF, RG, NOME, ENDERECO, CEP, DT_NASC, GENERO, TELEFONE, EMAIL, RESPONSAVEL
+            FROM PACIENTE
+            WHERE CPF = %s'''
+        cursor.execute(sql,(cpf_procurado,))
+        resultado = cursor.fetchall()
+
+        if len(resultado) == 0:
+            print("Paciente não encontrado!")
+            delay()
+
+        else:
+            resultados = []
+
+            for item in resultado:
+                item = list(item)
+                resultados.append(item)
+
+            colunas = ['CPF', 'RG', 'NOME', 'ENDEREÇO', 'CEP', 'DATA DE NASCIMENTO','GENERO','TELEFONE','E-MAIL','RESPONSÁVEL']
             tabela = tabulate(resultados, headers=colunas, tablefmt='grid')
             display(tabela)
             input("\nPressione Enter para continuar...")

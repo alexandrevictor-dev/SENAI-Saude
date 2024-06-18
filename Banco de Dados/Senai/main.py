@@ -1,8 +1,8 @@
 import conexao
 from nav_padrao import limpar_tela, delay
-from pacienteDAO import cadastrar_paciente, excluir_paciente, consultar_todos_pacientes
-from medicoDAO import cadastrar_medico, excluir_medico
-from consultaDAO import  cadastrar_consulta, excluir_consulta
+from pacienteDAO import cadastrar_paciente, excluir_paciente, consultar_todos_pacientes, consultar_por_cpf
+from medicoDAO import cadastrar_medico, excluir_medico, consultar_todos_medicos, consultar_por_crm
+from consultaDAO import  cadastrar_consulta, excluir_consulta, visualizar_todas_consultas, consultar_por_codigo
 
 conexao = conexao.conectar()
 cursor = conexao.cursor()
@@ -24,10 +24,10 @@ if op_menu == 1:
             op_consulta = int(input("-=-= CONSULTA DE PACIENTES =-=-\n\n1.Consulta única por CPF\n2.Consultar todos os pacientes\n\nEcolha uma opção: "))
 
             if op_consulta == 1:
-                pass
+                consultar_por_cpf(cursor)
 
             elif op_consulta == 2:
-                consultar_todos_pacientes(conexao, cursor)
+                consultar_todos_pacientes(cursor)
 
             else:
                 print("Opção Inválida!")
@@ -35,7 +35,6 @@ if op_menu == 1:
 
         case 4:
             excluir_paciente(conexao, cursor)
-
 
 elif op_menu == 2:
     print("-=-= ÁREA DE MÉDICOS =-=-")
@@ -45,6 +44,20 @@ elif op_menu == 2:
     match op_menu_sec:
         case 1:
             cadastrar_medico(conexao,cursor)
+
+        case 3:
+            op_consulta = int(input(
+                "-=-= CONSULTA DE MÉDICOS =-=-\n\n1.Consulta única por CRM\n2.Consultar todos os médicos\n\nEcolha uma opção: "))
+
+            if op_consulta == 1:
+                consultar_por_crm(cursor)
+
+            elif op_consulta == 2:
+                consultar_todos_medicos(cursor)
+
+            else:
+                print("Opção Inválida!")
+                delay()
 
         case 4:
             excluir_medico(conexao, cursor)
@@ -63,13 +76,13 @@ elif op_menu == 3:
             cadastrar_consulta(conexao, cursor)
 
         case 3:
-            op_consulta = int(input("-=-= CONSULTA DE PACIENTES=-=-\n\n1.Consulta única por CPF\n2.Consultar Todos os Pacientes\n\nEscolha uma opção: "))
+            op_consulta = int(input("-=-= VISUALIZAÇÃO DE CONSULTAS=-=-\n\n1.Visualização única por Código\n2.Visualizar todas as Consultas\n\nEscolha uma opção: "))
 
             if op_consulta ==1:
-                pass
+                consultar_por_codigo(cursor)
 
             elif op_consulta ==2:
-                consultar_todos_pacientes(cursor)
+                visualizar_todas_consultas(cursor)
 
             else:
                 print("Opção Inválida!")
