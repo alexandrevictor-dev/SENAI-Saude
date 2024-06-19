@@ -1,4 +1,4 @@
-from nav_padrao import limpar_tela, delay
+from nav_padrao import limpar_tela, delay, converter_data
 from tabulate import tabulate
 from IPython.core.display_functions import display
 
@@ -136,6 +136,9 @@ def visualizar_todas_consultas(cursor):
 
             for item in resultado:
                 item = list(item)
+
+                item[1] = converter_data(item[1])
+
                 resultados.append(item)
 
             colunas = ['Cód. Consulta', 'DT Consulta', 'Hr Consulta', 'Vr Consulta', 'Médico', 'Paciente']
@@ -176,6 +179,9 @@ def consultar_por_codigo(cursor):
 
             for item in resultado:
                 item = list(item)
+
+                item[1] = converter_data(item[1])
+
                 resultados.append(item)
 
             colunas = ['Cód. Consulta', 'DT Consulta', 'Hr Consulta', 'Vr Consulta', 'Médico', 'Paciente']

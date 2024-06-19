@@ -1,5 +1,5 @@
 from dic import especialidades
-from nav_padrao import limpar_tela, delay
+from nav_padrao import limpar_tela, delay, converter_data
 from tabulate import tabulate
 from IPython.core.display_functions import display
 
@@ -133,6 +133,14 @@ def consultar_todos_medicos(cursor):
 
             for item in resultado:
                 item = list(item)
+
+                item[8] = converter_data(item[8])
+                item[9] = converter_data(item[9])
+                item[10] = converter_data(item[10])
+
+                chave_esp = item[7]
+                item[7] = especialidades.get(chave_esp)   #GET -> Pega os valores do dic (dicionário)
+
                 resultados.append(item)
 
             colunas = ['CRM', 'NOME', 'RG', 'CPF', 'E-MAIL', 'ENDEREÇO', 'CEP', 'ESPECIALIDADE', 'DATA NASCIMENTO','DATA ADMISSÃO','DATA DESLIGAMENTO', 'STATUS MÉDICO']
@@ -162,7 +170,16 @@ def consultar_por_crm(cursor):
 
             for item in resultado:
                 item = list(item)
+
+                item[8] = converter_data(item[8])
+                item[9] = converter_data(item[9])
+                item[10] = converter_data(item[10])
+
+                chave_esp = item[7]
+                item[7] = especialidades.get(chave_esp)
+
                 resultados.append(item)
+
 
             colunas = ['CRM', 'NOME', 'RG', 'CPF', 'E-MAIL', 'ENDEREÇO', 'CEP', 'ESPECIALIDADE', 'DATA NASCIMENTO','DATA ADMISSÃO','DATA DESLIGAMENTO', 'STATUS MÉDICO']
             tabela = tabulate(resultados, headers=colunas, tablefmt='grid')

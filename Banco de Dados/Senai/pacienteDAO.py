@@ -1,5 +1,5 @@
 from dic import generos
-from nav_padrao import limpar_tela, delay
+from nav_padrao import limpar_tela, delay, converter_data
 from tabulate import tabulate
 from IPython.core.display_functions import display
 
@@ -29,7 +29,7 @@ def cadastrar_paciente(conexao, cursor):
             nome = input("Nome: ")
             endereco = input("Endereço: ")
             cep = input("CEP: ")
-            dt_nasc = input("Data de Nascimento: ")
+            dt_nasc = input("Data de Nascimento(DD/MM/YYYY): ")
 
             while True:
                 print("\nGênero: ")
@@ -119,6 +119,8 @@ def consultar_todos_pacientes(cursor):
             for item in resultado:
                 item = list(item)
 
+                item[5] = converter_data(item[5])
+
                 chave_genero = item[6]
                 item[6] = generos.get(chave_genero)
 
@@ -152,6 +154,12 @@ def consultar_por_cpf(cursor):
             for item in resultado:
                 item = list(item)
                 resultados.append(item)
+
+                item[5] = converter_data(item[5])
+
+                chave_genero = item[6]
+                item[6] = generos.get(chave_genero)
+
 
             colunas = ['CPF', 'RG', 'NOME', 'ENDEREÇO', 'CEP', 'DATA DE NASCIMENTO','GENERO','TELEFONE','E-MAIL','RESPONSÁVEL']
             tabela = tabulate(resultados, headers=colunas, tablefmt='grid')
