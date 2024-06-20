@@ -1,4 +1,4 @@
-from nav_padrao import limpar_tela, delay, converter_data
+from nav_padrao import limpar_tela, delay, converter_data, converter_data_banco
 from tabulate import tabulate
 from IPython.core.display_functions import display
 
@@ -55,7 +55,7 @@ def cadastrar_consulta(conexao, cursor):
                         delay()
 
                     else:
-                        dt_consulta = input("Data da Consulta (YYYY-MM-DD): ")
+                        dt_consulta = converter_data_banco(input("Data da Consulta (DD/MM/YYYY): "))
                         hr_consulta = input("Hora da Consulta (HH:MM:SS): ")
                         # Adicionar tratamento para inserção de DATA e HORA
                         # Adicionar validação para DATA E HORA disponíveis (medico e paciente)

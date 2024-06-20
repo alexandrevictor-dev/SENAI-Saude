@@ -1,5 +1,5 @@
 from dic import especialidades
-from nav_padrao import limpar_tela, delay, converter_data
+from nav_padrao import limpar_tela, delay, converter_data, converter_data_banco
 from tabulate import tabulate
 from IPython.core.display_functions import display
 
@@ -62,8 +62,8 @@ def cadastrar_medico(conexao, cursor):
                     else:
                         break
 
-                dt_nasc = input("Data de nascimento: ")
-                dt_admissao = input("Data de admissão: ")
+                dt_nasc = converter_data_banco(input("Data de nascimento (DD/MM/YYYYY): "))
+                dt_admissao = converter_data_banco(input("Data de admissão (DD/MM/YYYYY): "))
                 dt_desligamento = None
 
                 sql = '''INSERT INTO medico (CRM, NOME, RG, CPF, EMAIL, ENDERECO, CEP, ESP_MEDICA, DT_NASC, DT_ADMISSAO)   

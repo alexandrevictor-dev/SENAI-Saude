@@ -1,5 +1,5 @@
 from dic import generos
-from nav_padrao import limpar_tela, delay, converter_data
+from nav_padrao import limpar_tela, delay, converter_data, converter_data_banco
 from tabulate import tabulate
 from IPython.core.display_functions import display
 
@@ -29,7 +29,8 @@ def cadastrar_paciente(conexao, cursor):
             nome = input("Nome: ")
             endereco = input("Endereço: ")
             cep = input("CEP: ")
-            dt_nasc = input("Data de Nascimento(DD/MM/YYYY): ")
+            dt_nasc = converter_data_banco(input("Data de Nascimento(DD/MM/YYYY): "))
+
 
             while True:
                 print("\nGênero: ")
