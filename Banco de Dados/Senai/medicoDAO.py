@@ -188,3 +188,68 @@ def consultar_por_crm(cursor):
 
     except Exception as e:
         print("Erro: ", e)
+
+
+def inativar_medico(conexao, cursor):
+    def inativar_medico(conexao, cursor):
+        print(" -=-=INATIVAR MÉDICO=-=- \n")
+
+        crm = input("CRM: ")
+
+        try:
+            sql = "SELECT ID, NOME FROM MEDICO WHERE CRM = %s"
+            cursor.execute(sql, (crm,))
+            resultado = cursor.fetchall()  # vai gravar nos resultado todas as linhas retornadas pela execução da query
+            if len(resultado) == 0:
+                print("Médico não encontrado!")
+                delay()
+
+            else:
+                id_medico = resultado[0][0]
+                nome_medico = resultado[0][1]
+                sql = "SELECT STATUS_MEDICO FROM MEDICO WHERE ID = %s;"
+                cursor.execute(sql, (id_medico,))
+                resultado = cursor.fetchall()
+                status_medico = resultado[0][0]
+
+                if status_medico == 'Inativo':
+                    limpar_tela()
+                    input("Médico já está Inativo no Sistema.\n\n Pressione entrer para continuar...")
+
+                else:
+                    op_desligamento = int(
+                        input(f"Deseja desligar o Médico {nome_medico}?\n1.Sim 2.Não\n\n Escolha uma opção: "))
+
+                    if op_desligamento == 1:
+                        data_desligamento = converter_data_banco(input("Data Desligamento (DD/MM/AAAA): "))
+                        sql = "SELECT DATA_CONSULTA FROM CONSULTA WHERE ID_MEDICO = %s AND DATA_CONSULTA >=%s;"
+                        cursor.execute(sql, (id_medico, data_desligamento))
+                        resultado = cursor.fetchall()
+
+                        if len(resultado) != 0:
+                            print("Médico não poderá ser desligado, pois possui consultas vinculadas ao seu cadastro "
+                                  "com data igual ou maior à data inserida para o desligamento.\n\n"
+                                  "Pressione enter para retornar...")
+
+                        else:
+                            sql = "UPDATE MEDICO SET DATA_DESLIGAMENTO = %s WHERE ID = %s;"
+                            cursor.execute(sql, (data_desligamento, id_medico))
+                            conexao.commit()
+                            limpar_tela()
+                            print(f"O médico{nome_medico} foi inativo!")
+                            delay()
+
+                    elif op_desligamento == 2:
+                        limpar_tela()
+                        print("Retornando...")
+                        delay()
+
+                    else:
+                        limpar_tela()
+                        print("Opção inválida!")
+                        delay()
+
+        except Exception as e:
+            print("Erro:", e)
+
+    # definir reativar medico #igual o inativar mas com algumas diferenças

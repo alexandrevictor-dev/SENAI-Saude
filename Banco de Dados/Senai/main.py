@@ -1,7 +1,7 @@
 import conexao
 from nav_padrao import limpar_tela, delay
 from pacienteDAO import cadastrar_paciente, excluir_paciente, consultar_todos_pacientes, consultar_por_cpf
-from medicoDAO import cadastrar_medico, excluir_medico, consultar_todos_medicos, consultar_por_crm
+from medicoDAO import cadastrar_medico, excluir_medico, consultar_todos_medicos, consultar_por_crm, inativar_medico
 from consultaDAO import  cadastrar_consulta, excluir_consulta, visualizar_todas_consultas, consultar_por_codigo
 
 conexao = conexao.conectar()
@@ -61,6 +61,9 @@ elif op_menu == 2:
 
         case 4:
             excluir_medico(conexao, cursor)
+
+        case 5:
+            inativar_medico()
 
 
     #case _:  # DEFAULT = ELSE
