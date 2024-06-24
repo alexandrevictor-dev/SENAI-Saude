@@ -169,3 +169,93 @@ def consultar_por_cpf(cursor):
 
     except Exception as e:
         print("Erro: ", e)
+
+
+def editar_paciente(conexao, cursor):
+    print(" -=-=EDIÇÃO DE PACIENTE=-=- ")
+    cpf = input("CPF: ")
+
+    try:
+        sql = "SELECT ID, CPF, RG FROM PACIENTE WHERE CPF = %s"
+        cursor.execute(sql, (cpf,))
+        resultado = cursor.fetchall()
+        limpar_tela()
+        if len(resultado) == 0:
+            print("Paciente não  encontrado!")
+            delay()
+
+        else:
+            id_paciente = resultado [0][0]
+            cpf_atual = resultado[0][1]
+            rg_atual = resultado[0][2]
+            novo_cpf = input("Novo CPF: ")
+            cursor.execute(sql, (novo_cpf,))
+            resultado = cursor.fetchall()
+
+            '''O sistema deverá permitir a edição se o novo CPF digitado foi igual ao CPF
+            já cadastrado para esse paciente ou se o novo CPF não estiver vinculado a nenhum
+            outro paciente no banco de dados.'''
+
+            if len(resultado) != 0 and cpf_atual != novo_cpf:
+                limpar_tela()
+                print("CPF já cadastrado para outro paciente!")
+                delay()
+
+            else:
+                novo_rg = input("Novo RG: ")
+                '''O sistema deverá permitir a edição se o novo RG digitado for igual ao RG já
+                cadastrado para este paciente ou se o novo RG não estiver vinculado a nenhum outro 
+                paciente no banco de dados'''
+
+                sql = "SELECT RG FROM PACIENTE WHERE RG = %s"
+                cursor.execute(sql, (novo_rg,))
+                resultado = cursor.fetchall()
+
+                if len(resultado) != 0 and novo_rg != rg_atual:
+                    limpar_tela()
+                    print("RG já cadastrado para outro paciente!")
+                    delay()
+
+                else:
+                    nome = input("Nome: ")
+                    endereco = input("Endereço: ")
+                    cep = input("CEP: ")
+                    dt_nasc = converter_data_banco(input("Data de Nascimento(DD/MM/YYYY): "))
+
+                    while True:
+                        print("\nGênero: ")
+                        for chave, valor in generos.items():
+                            print(f"{chave} - {valor}")
+
+                        chave_genero = int(input("\nEscolha uma opção: "))
+
+                        if chave_genero not in generos:
+                            print("Opção Inválida!")
+                            delay()
+                            limpar_tela()
+
+                        else:
+                            break
+
+                    telefone = input("Telefone: ")
+                    email = input("E-mail: ")
+                    responsavel = input("O paciente necessita de um responsável(S/N)? ")
+                    if responsavel.upper() == 'S':
+                        responsavel = input("Digite o nome do responsável: ")
+                    else:
+                        responsavel = None
+
+                sql = '''UPDATE PACIENTE
+                        SET CPF = %s, RG = %s, NOME = %s, ENDERECO = %s, CEP = %s, DT_NASC = %s, GENERO = %s,
+                        TELEFONE = %s, EMAIL = %s, RESPONSAVEL = %s
+                        WHERE ID = %s'''
+
+                valores = (novo_cpf, novo_rg, nome, endereco, cep, dt_nasc, chave_genero, telefone, email, responsavel, id_paciente)
+
+                cursor.execute(sql, valores)
+                conexao.commit()
+                limpar_tela()
+                print(cursor.rowcount, "registro alterado.")
+    except Exception as e:
+        print("Erro: ", e)
+
