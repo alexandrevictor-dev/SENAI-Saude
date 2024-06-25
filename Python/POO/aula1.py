@@ -1,29 +1,41 @@
-class Musica:
+class Restaurante:
     nome = ""
-    artista = ""
-    genero = ""
+    categoria = ""
+    regiao = ""
+    espaco_kids = ""
+    n_funcionarios = int
+    ativo = False
 
 
-m1 = Musica()
-m1.nome = "After Life"
-m1.artista = "Five Fingers Death Punch"
-m1.genero = "Rock"
+pizza = Restaurante()
+pizza.nome = "Pizza Place"
+pizza.categoria = "FastFood"
+pizza.espaco_kids = "Não"
+pizza.n_funcionarios = 25
+pizza.regiao = "Maricá"
+pizza.ativo = False
 
-m2 = Musica()
-m2.nome = "I Had Some Help"
-m2.artista = "Post Malone"
-m2.genero = "Country Rock"
+praca = Restaurante()
+praca.nome = "A Galega"
+praca.categoria = "Italiana"
+praca.regiao = "São Gonçalo"
+praca.espaco_kids = "Não"
+praca.n_funcionarios = "4"
+praca.ativo = True
 
-m3 = Musica()
-m3.nome = "Tu és"
-m3.artista = "Fhop Music"
-m3.genero  = "Gospel Worship"
+if pizza.categoria == "FastFood":
+    print("A categoria está correta!")
+
+else:
+    print("A categoria está incorreta")
+
+if pizza.ativo == True:
+    print("O restaurante está ativo")
+else:
+    print("O restaurante esta desativado")
 
 
 
-
-
-print(m2) # Quando executamos dessa forma, ele mostra o código de onde
-#Está alocado na memória. Para mostrar o que há de funções e atributos em forma de dicionário, utiliza-se a função "vars"
-
-print(vars(m2))
+# print(pizzahut)  # Quando executamos dessa forma, ele mostra o código de onde está alocado na memória.
+# Para mostrar o que há de funções e atributos em forma de dicionário, utiliza-se a função "vars"
+# print(vars(pizzahut))
