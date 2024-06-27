@@ -191,3 +191,85 @@ def consultar_por_codigo(cursor):
 
     except Exception as e:
         print("Erro: ", e)
+
+
+def editar_consulta(conexao, cursor):
+    cod_consulta = input("Digite o código da consulta: ")
+    sql = "SELECT ID, DT_CONSULTA, HR_CONSULTA, ID_MEDICO, ID_PACIENTE FROM CONSULTA WHERE COD_CONSULTA = %s"
+
+
+    try:
+        cursor.execute(sql, (cod_consulta,))
+        resultado = cursor.fetchall()
+
+        if len(resultado) == 0:
+            limpar_tela()
+            print("Consulta não encontrada!")
+            delay()
+
+        else:
+            id_consulta = resultado[0][0]
+            dt_consulta = resultado[0][1]
+            hr_consulta = resultado[0][2]
+            id_medico = resultado[0][3]
+            id_paciente = resultado[0][4]
+
+            n_cod_consulta = input("Novo código de consulta: ")
+            cursor.execute(sql, (n_cod_consulta,))
+            resultado = cursor.fetchall()
+
+            #n_cod_consulta só pode ser == cod_atual ou != de todos os outros códigos
+            if len(resultado) != 0 and n_cod_consulta != cod_consulta:
+                limpar_tela()
+                print("Código já vinculado a outra consulta!")
+                delay()
+
+            else:
+                n_dt_consulta = converter_data_banco(input("Data da Consulta: "))
+                n_hr_consulta = input("Hora da Consulta (HH:MM:SS): ")
+
+                crm_medico = input("CRM do Médico: ")
+                sql = "SELECT ID, NOME FROM MEDICO WHERE CRM = %s"
+                cursor.execute(sql, (crm_medico,))
+                resultado = cursor.fetchall()
+
+                if len(resultado) == 0:
+                    limpar_tela()
+                    print("Médico não encontrado!")
+                    delay()
+
+                else:
+                    id_novo_medico = resultado[0][0]
+                    nome_novo_medico = resultado[0][1]
+
+                    cpf_paciente = input("CPF do paciente: ")
+                    sql = "SELECT ID, NOME FROM PACIENTE WHERE CPF = %s"
+                    cursor.execute(sql, (cpf_paciente,))
+                    resultado = cursor.fetchall()
+
+                    if len(resultado) == 0:
+                        limpar_tela()
+                        print("Paciente não encontrado!")
+                        delay()
+
+                    else:
+                        id_novo_paciente = resultado[0][0]
+                        nome_novo_paciente = resultado[0][1]
+                    #PEDIR EXPLICAÇÃO DESSE SQL \/
+                        sql = '''SELECT COD_CONSULTA, DT_CONSULTA, HR_CONSULTA
+                        FROM CONSULTA
+                        WHERE (ID_MEDICO = %s OR ID_PACIENTE = %s)
+                        AND DT_CONSULTA = %s AND HR_CONSULTA = s%'''
+
+                        valores = (id_novo_medico, id_novo_paciente, n_dt_consulta, n_hr_consulta)
+                        cursor.execute(sql, valores)
+                        resultado = cursor.fetchall()
+
+                        if len(resultado) != 0:
+                            if cod_consulta != resultado[0][0]:
+                                limpar_tela()
+                                print("Médico e/ou paciente não possuem dia/horário disponivel para marcação da consulta.")
+                                delay()
+
+                        else:
+
