@@ -255,11 +255,12 @@ def editar_consulta(conexao, cursor):
                     else:
                         id_novo_paciente = resultado[0][0]
                         nome_novo_paciente = resultado[0][1]
+
                     #PEDIR EXPLICAÇÃO DESSE SQL \/
                         sql = '''SELECT COD_CONSULTA, DT_CONSULTA, HR_CONSULTA
                         FROM CONSULTA
                         WHERE (ID_MEDICO = %s OR ID_PACIENTE = %s)
-                        AND DT_CONSULTA = %s AND HR_CONSULTA = s%'''
+                        AND DT_CONSULTA = %s AND HR_CONSULTA = %s'''
 
                         valores = (id_novo_medico, id_novo_paciente, n_dt_consulta, n_hr_consulta)
                         cursor.execute(sql, valores)
@@ -272,4 +273,18 @@ def editar_consulta(conexao, cursor):
                                 delay()
 
                         else:
+                            n_vr_consulta = float(input("Valor da Consulta: "))
+                            sql = '''UPDATE CONSULTA
+                            SET COD_CONSULTA = %s, DT_CONSULTA = %s, HR_CONSULTA = %s,VR_CONSULTA = %s, ID_MEDICO = %s,
+                                ID_PACIENTE = %s WHERE ID = %s'''
 
+                            valores = (n_cod_consulta, n_dt_consulta, n_hr_consulta, n_vr_consulta, id_novo_medico, id_novo_paciente, id_consulta)
+
+                            cursor.execute(sql, valores)
+                            conexao.commit()
+                            limpar_tela()
+                            print(f"Consulta {n_cod_consulta} alterada com sucesso.\nMédico: {nome_novo_medico}\nPaciente: {nome_novo_paciente}")
+                            delay()
+
+    except Exception as e:
+        print("Erro: ", e)
