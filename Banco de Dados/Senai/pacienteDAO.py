@@ -170,7 +170,6 @@ def consultar_por_cpf(cursor):
     except Exception as e:
         print("Erro: ", e)
 
-
 def editar_paciente(conexao, cursor):
     print(" -=-=EDIÇÃO DE PACIENTE=-=- ")
     cpf = input("CPF: ")
@@ -258,4 +257,53 @@ def editar_paciente(conexao, cursor):
                 print(cursor.rowcount, "registro alterado.")
     except Exception as e:
         print("Erro: ", e)
+
+def relatorio_paciente(cursor):
+    try:
+        sql = '''SELECT DISTINCT
+            
+            PACIENTE.NOME AS PACIENTE, 
+            PACIENTE.DT_NASC,
+            PACIENTE.CPF,
+            COUNT(CONSULTA.ID)
+            
+            FROM CONSULTA
+
+            INNER JOIN PACIENTE ON CONSULTA.ID_PACIENTE = PACIENTE.ID 
+
+            ORDER BY PACIENTE.NOME ASC'''
+        # Inner join: COMPARA 2 TABELAS
+        cursor.execute(sql)
+        resultado = cursor.fetchall()
+
+        if len(resultado) == 0:
+            print("Não há consultas cadastradas no Sistema!")
+            delay()
+
+        else:
+            resultados = []
+
+            for item in resultado:
+                item = list(item)
+                resultados.append(item)
+                item[1] = converter_data(item[1])
+
+            colunas = ['Nome', 'DT Nascimento', 'CPF', 'QTD. Consultas']
+            tabela = tabulate(resultados, headers=colunas, tablefmt='grid')
+            display(tabela)
+            input("\nPressione Enter para continuar...")
+
+    except Exception as e:
+        print("Erro: ", e)
+
+
+'''relatório de pacientes que possuem consultas marcadas
+Relatório deverá trazer na tela:
+ - Nome do Paciente
+ - Data de Nascimento
+ - Código da Consulta
+ - Data da Consulta
+ - Hora da Consulta
+ 
+ Em ordem alfabética'''
 
