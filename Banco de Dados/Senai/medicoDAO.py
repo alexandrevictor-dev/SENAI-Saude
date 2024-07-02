@@ -62,16 +62,13 @@ def cadastrar_medico(conexao, cursor):
                     else:
                         break
 
-                dt_nasc = converter_data_banco(
-                    input("Data de nascimento (DD/MM/YYYYY): "))
-                dt_admissao = converter_data_banco(
-                    input("Data de admissão (DD/MM/YYYYY): "))
+                dt_nasc = converter_data_banco(input("Data de nascimento (DD/MM/YYYYY): "))
+                dt_admissao = converter_data_banco(input("Data de admissão (DD/MM/YYYYY): "))
                 dt_desligamento = None
 
                 sql = '''INSERT INTO medico (CRM, NOME, RG, CPF, EMAIL, ENDERECO, CEP, ESP_MEDICA, DT_NASC, DT_ADMISSAO)   
                                                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
-                valores = (crm, nome, rg, cpf, email, endereco, cep,
-                           chave_esp_medica, dt_nasc, dt_admissao)
+                valores = (crm, nome, rg, cpf, email, endereco, cep, chave_esp_medica, dt_nasc, dt_admissao)
 
                 try:
                     cursor.execute(sql, valores)
@@ -89,8 +86,7 @@ def excluir_medico(conexao, cursor):
     try:
         sql = "SELECT ID, NOME FROM MEDICO WHERE CRM = %s"
         cursor.execute(sql, (cpf,))
-        # retorna para resultado; todas as linhas retornadas pela execução da query
-        resultado = cursor.fetchall()
+        resultado = cursor.fetchall()  # retorna para resultado; todas as linhas retornadas pela execução da query
 
         if len(resultado) == 0:
             print("Médico não encontrado.")
@@ -107,8 +103,7 @@ def excluir_medico(conexao, cursor):
                 sql = "DELETE FROM MEDICO WHERE ID = %s"
                 cursor.execute(sql, (id_medico,))
                 conexao.commit()
-                input(
-                    f"\nPaciente {nome_medico} excluído\nPressione enter para continuar.")
+                input(f"\nPaciente {nome_medico} excluído\nPressione enter para continuar.")
 
             elif op_exclusao == 2:
                 print("Retornando ao menu principal")
@@ -144,13 +139,11 @@ def consultar_todos_medicos(cursor):
                 item[10] = converter_data(item[10])
 
                 chave_esp = item[7]
-                # GET -> Pega os valores do dic (dicionário)
-                item[7] = especialidades.get(chave_esp)
+                item[7] = especialidades.get(chave_esp)   #GET -> Pega os valores do dic (dicionário)
 
                 resultados.append(item)
 
-            colunas = ['CRM', 'NOME', 'RG', 'CPF', 'E-MAIL', 'ENDEREÇO', 'CEP', 'ESPECIALIDADE',
-                       'DATA NASCIMENTO', 'DATA ADMISSÃO', 'DATA DESLIGAMENTO', 'STATUS MÉDICO']
+            colunas = ['CRM', 'NOME', 'RG', 'CPF', 'E-MAIL', 'ENDEREÇO', 'CEP', 'ESPECIALIDADE', 'DATA NASCIMENTO','DATA ADMISSÃO','DATA DESLIGAMENTO', 'STATUS MÉDICO']
             tabela = tabulate(resultados, headers=colunas, tablefmt='grid')
             display(tabela)
             input("\nPressione Enter para continuar...")
@@ -165,7 +158,7 @@ def consultar_por_crm(cursor):
         sql = '''SELECT CRM, NOME, RG, CPF, EMAIL, ENDERECO, CEP, ESP_MEDICA, DT_NASC, DT_ADMISSAO, DT_DESLIGAMENTO, STATUS_MEDICO 
                         FROM MEDICO
                     WHERE CRM = %s'''
-        cursor.execute(sql, (crm_procurado,))
+        cursor.execute(sql,(crm_procurado,))
         resultado = cursor.fetchall()
 
         if len(resultado) == 0:
@@ -187,8 +180,8 @@ def consultar_por_crm(cursor):
 
                 resultados.append(item)
 
-            colunas = ['CRM', 'NOME', 'RG', 'CPF', 'E-MAIL', 'ENDEREÇO', 'CEP', 'ESPECIALIDADE',
-                       'DATA NASCIMENTO', 'DATA ADMISSÃO', 'DATA DESLIGAMENTO', 'STATUS MÉDICO']
+
+            colunas = ['CRM', 'NOME', 'RG', 'CPF', 'E-MAIL', 'ENDEREÇO', 'CEP', 'ESPECIALIDADE', 'DATA NASCIMENTO','DATA ADMISSÃO','DATA DESLIGAMENTO', 'STATUS MÉDICO']
             tabela = tabulate(resultados, headers=colunas, tablefmt='grid')
             display(tabela)
             input("\nPressione Enter para continuar...")
@@ -198,15 +191,14 @@ def consultar_por_crm(cursor):
 
 
 def inativar_medico(conexao, cursor):
-    print(" -=-=INATIVAR MÉDICO=-=- \n")  # certeza que era
+    print(" -=-=INATIVAR MÉDICO=-=- \n") #certeza que era
 
     crm = input("CRM: ")
 
     try:
         sql = "SELECT ID, NOME FROM MEDICO WHERE CRM = %s"
         cursor.execute(sql, (crm,))
-        # vai gravar nos resultado todas as linhas retornadas pela execução da query
-        resultado = cursor.fetchall()
+        resultado = cursor.fetchall()  # vai gravar nos resultado todas as linhas retornadas pela execução da query
         if len(resultado) == 0:
             print("Médico não encontrado!")
             delay()
@@ -221,16 +213,14 @@ def inativar_medico(conexao, cursor):
 
             if status_medico == 'Inativo':
                 limpar_tela()
-                input(
-                    "Médico já está Inativo no Sistema.\n\n Pressione entrer para continuar...")
+                input("Médico já está Inativo no Sistema.\n\n Pressione entrer para continuar...")
 
             else:
                 op_desligamento = int(
                     input(f"Deseja desligar o Médico {nome_medico}?\n1.Sim 2.Não\n\n Escolha uma opção: "))
 
                 if op_desligamento == 1:
-                    data_desligamento = converter_data_banco(
-                        input("Data Desligamento (DD/MM/AAAA): "))
+                    data_desligamento = converter_data_banco(input("Data Desligamento (DD/MM/AAAA): "))
                     sql = "SELECT DT_CONSULTA FROM CONSULTA WHERE ID_MEDICO = %s AND DT_CONSULTA >=%s;"
                     cursor.execute(sql, (id_medico, data_desligamento))
                     resultado = cursor.fetchall()
@@ -270,8 +260,7 @@ def ativar_medico(conexao, cursor):
     try:
         sql = "SELECT ID, NOME, STATUS_MEDICO FROM MEDICO WHERE CRM = %s"
         cursor.execute(sql, (crm,))
-        # vai gravar nos resultado todas as linhas retornadas pela execução da query
-        resultado = cursor.fetchall()
+        resultado = cursor.fetchall()  # vai gravar nos resultado todas as linhas retornadas pela execução da query
         if len(resultado) == 0:
             print("Médico não encontrado!")
             delay()
@@ -283,8 +272,7 @@ def ativar_medico(conexao, cursor):
 
             if status_medico == 'Ativo':
                 limpar_tela()
-                input(
-                    "Médico já está Ativo no Sistema.\n\n Pressione enter para continuar...")
+                input("Médico já está Ativo no Sistema.\n\n Pressione enter para continuar...")
 
             else:
                 op_ativacao = int(
@@ -292,7 +280,7 @@ def ativar_medico(conexao, cursor):
 
                 if op_ativacao == 1:
                     sql = "UPDATE MEDICO SET DT_DESLIGAMENTO = NULL WHERE ID = %s"
-                    cursor.execute(sql, (id_medico,))
+                    cursor.execute(sql,(id_medico,))
                     conexao.commit()
 
                     limpar_tela()
@@ -312,11 +300,11 @@ def ativar_medico(conexao, cursor):
 
 
 def editar_medico(conexao, cursor):
-    print(" -=-=EDIÇÃO DE MÉDICO=-=- ")
+    print(" -=-=EDIÇÃO DE MÉDICO=-=-\n ")
     crm = input("CRM: ")
 
     try:
-        sql = "SELECT ID, CRM, RG FROM MEDICO WHERE CRM = %s"
+        sql = "SELECT ID, CPF, RG, NOME FROM MEDICO WHERE CRM = %s"
         cursor.execute(sql, (crm,))
         resultado = cursor.fetchall()
         limpar_tela()
@@ -326,78 +314,180 @@ def editar_medico(conexao, cursor):
 
         else:
             id_medico = resultado[0][0]
-            crm_atual = resultado[0][1]
+            cpf_atual = resultado[0][1]
             rg_atual = resultado[0][2]
+            nome_atual = resultado[0][3]
+
             novo_crm = input("Novo CRM: ")
             cursor.execute(sql, (novo_crm,))
             resultado = cursor.fetchall()
 
-            '''O sistema deverá permitir a edição se o novo CRM digitado foi igual ao CRM
-            já cadastrado para esse médico ou se o novo CRM não estiver vinculado a nenhum
-            outro médico no banco de dados.'''
-
-            if len(resultado) != 0 and crm_atual != novo_crm:
+            if len(resultado) != 0 and novo_crm != crm:
                 limpar_tela()
-                print("CRM já cadastrado para outro médico!")
+                print("CRM já esta cadastrado para outro médico!")
                 delay()
 
             else:
-                novo_rg = input("Novo RG: ")
-                '''O sistema deverá permitir a edição se o novo RG digitado for igual ao RG já
-                cadastrado para este médico ou se o novo RG não estiver vinculado a nenhum outro 
-                médico no banco de dados'''
+                novo_cpf = input("Novo CPF: ")
 
-                sql = "SELECT RG FROM MEDICO WHERE RG = %s"
-                cursor.execute(sql, (novo_rg,))
-                resultado = cursor.fetchall()
+                sql = "SELECT ID FROM MEDICO WHERE CPF = %s"
+                cursor.execute(sql, (id_medico,))
+                resultado = cursor.fetchall() # ->>>>>>>>>>>>>fetchall: pega todos os registros e reune
 
-                if len(resultado) != 0 and novo_rg != rg_atual:
+                #Se o resultado da query for diferente de zero e o ID diferente do ID atual do médico, impedir.
+                if len(resultado) != 0 and (id_medico,) not in resultado:
                     limpar_tela()
-                    print("RG já cadastrado para outro médico!")
+                    print("CPF já cadastrado para outro médico!")
                     delay()
 
-                else:  # <----------------------------------------------------------PAREI AQUI--------------------------------------------
-                    nome = input("Nome: ")
-                    endereco = input("Endereço: ")
-                    cep = input("CEP: ")
-                    dt_nasc = converter_data_banco(
-                        input("Data de Nascimento(DD/MM/YYYY): "))
+                else:
+                    novo_rg = input("Novo RG: ")
 
-                    while True:
-                        print("\nGênero: ")
-                        for chave, valor in generos.items():
-                            print(f"{chave} - {valor}")
+                    sql = "SELECT ID FROM MEDICO WHERE RG = %s "
+                    cursor.execute(sql, (novo_rg,))
+                    resultado = cursor.fetchall()
 
-                        chave_genero = int(input("\nEscolha uma opção: "))
+                    if len(resultado) !=0 and id_medico not in resultado:
+                        limpar_tela()
+                        print("RG já cadastrado para outro médico")
+                        delay()
 
-                        if chave_genero not in generos:
-                            print("Opção Inválida!")
-                            delay()
-                            limpar_tela()
-
-                        else:
-                            break
-
-                    telefone = input("Telefone: ")
-                    email = input("E-mail: ")
-                    responsavel = input(
-                        "O paciente necessita de um responsável(S/N)? ")
-                    if responsavel.upper() == 'S':
-                        responsavel = input("Digite o nome do responsável: ")
                     else:
-                        responsavel = None
+                        nome = input("Nome: ")
+                        email = input("E-mail: ")
+                        endereco = input("Endereço: ")
+                        cep = input("CEP: ")
 
-                sql = '''UPDATE PACIENTE
-                        SET CPF = %s, RG = %s, NOME = %s, ENDERECO = %s, CEP = %s, DT_NASC = %s, GENERO = %s,
-                        TELEFONE = %s, EMAIL = %s, RESPONSAVEL = %s
-                        WHERE ID = %s'''
+                        while True:
+                            print("\nEspecialidade Médica: ")
+                            for chave, valor in especialidades.items():
+                                print(f"{chave} - {valor}")
 
-                valores = (novo_cpf, novo_rg, nome, endereco, cep, dt_nasc,
-                           chave_genero, telefone, email, responsavel, id_paciente)
+                            chave_esp_medica = int(input("\nEscolha uma opção: "))
 
-                cursor.execute(sql, valores)
-                conexao.commit()
-                limpar_tela()
-                print(cursor.rowcount, "registro alterado.")
+                            if chave_esp_medica not in especialidades:
+                                print("Opção Inválida!")
+                                delay()
+                                limpar_tela()
+
+                            else:
+                                break
+
+                        dt_nasc = converter_data_banco(input("Data de nascimento (DD/MM/YYYYY): "))
+                        dt_admissao = converter_data_banco(input("Data de admissão (DD/MM/YYYYY): "))
+                        dt_desligamento = None
+
+                        #verificar no meu banco se o nome é ESPECIALIDADE MEDICA OU ESP_MEDICA
+                        sql = '''UPDATE MEDICO
+                                    SET CRM = %s, NOME, RG, CPF, EMAIL, ENDERECO, CEP ESPECIALIDADE_MEDICA, DT_NASC, DT_ADMISSAO  
+                                WHERE
+                                    ID = %s'''
+
+                        valores = (novo_crm, nome, novo_rg, novo_cpf, email, endereco, cep, chave_esp_medica, dt_nasc, dt_admissao, id_medico)
+
+                        cursor.execute(sql, valores)
+                        conexao.commit()
+                        limpar_tela()
+                        print(f"Médico {nome} alterado com Sucesso!")
+                        delay()
+
+    except Exception as e:
+        print(f"Erro: {e}")
+
+
+def relatorio_especialidades(cursor):
+    for chave, valor in especialidades.items():
+        print(f"{chave} - {valor}")
+
+    especialidade_procurada = input("Especialidade: ")
+
+    try:
+        sql = '''SELECT CRM, 
+                        NOME, 
+                        ESP_MEDICA 
+                        FROM MEDICO
+                        WHERE ESP_MEDICA = %s
+                        ORDER BY NOME ASC'''
+
+        cursor.execute(sql, (especialidade_procurada,))
+        resultado = cursor.fetchall()
+        limpar_tela()
+
+        if len(resultado) == 0:
+            print("Não há especialidades cadastradas!")
+            delay()
+            limpar_tela()
+
+        else:
+            resultados = []
+
+            for item in resultado:
+                item = list(item)
+
+                chave_especialidade = item[2]
+                item[2] = especialidades.get(chave_especialidade)
+
+                resultados.append(item)
+
+            colunas = ['CRM', 'NOME', 'ESPECIALIDADE']
+            tabela = tabulate(resultados, headers=colunas, tablefmt='grid')
+            display(tabela)
+            input("\nPressione Enter para continuar...")
+
     except Exception as e:
         print("Erro: ", e)
+
+
+def relatorio_status(cursor):
+    status_procurado = int(input("Digite o Status\n1. Ativo\n2. Inativo\n\nSelecione uma opção:"))
+
+    try:
+        if status_procurado == 1 or status_procurado == 2:
+
+            if status_procurado ==1:
+                status_procurado = 'Ativo'
+
+            elif status_procurado ==2:
+                status_procurado = 'Inativo'
+
+            sql = '''SELECT CRM, 
+                            NOME, 
+                            ESP_MEDICA,
+                            STATUS_MEDICO
+                            FROM MEDICO
+                            WHERE STATUS_MEDICO = %s
+                            ORDER BY MEDICO.NOME ASC'''
+
+            cursor.execute(sql, (status_procurado,))
+            resultado = cursor.fetchall()
+            limpar_tela()
+
+            if len(resultado) == 0:
+                print("Não há medicos no status escolhido")
+                delay()
+                limpar_tela()
+
+            else:
+                resultados = []
+
+                for item in resultado:
+                    item = list(item)
+
+                    chave_esp = item[2]
+                    item[2] = especialidades.get(chave_esp)
+
+                    resultados.append(item)
+
+                colunas = ['CRM', 'NOME', 'ESPECIALIDADE','STATUS']
+                tabela = tabulate(resultados, headers=colunas, tablefmt='grid')
+                display(tabela)
+                input("\nPressione Enter para continuar...")
+        else:
+            print("Código inválido!")
+    except Exception as e:
+        print("Erro: ", e)
+
+
+
+
+
