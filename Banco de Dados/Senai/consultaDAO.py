@@ -288,3 +288,105 @@ def editar_consulta(conexao, cursor):
 
     except Exception as e:
         print("Erro: ", e)
+
+def relatorio_data_unica(cursor):
+    try:
+        data_procurada = converter_data_banco(input("Data (DD/MM/AAAA): "))
+
+        sql = '''SELECT              
+            CONSULTA.DT_CONSULTA, 
+            CONSULTA.HR_CONSULTA,  
+            MEDICO.NOME AS MEDICO,
+            PACIENTE.NOME AS PACIENTE
+
+            FROM CONSULTA
+
+            INNER JOIN MEDICO ON CONSULTA.ID_MEDICO = MEDICO.ID
+            INNER JOIN PACIENTE ON CONSULTA.ID_PACIENTE = PACIENTE.ID
+            WHERE DT_CONSULTA = %s
+
+            ORDER BY DT_CONSULTA, HR_CONSULTA'''
+        cursor.execute(sql,(data_procurada,))
+        resultado = cursor.fetchall()
+
+        if len(resultado) == 0:
+            print("Não há consultas cadastradas neste dia !")
+            delay()
+
+
+        else:
+
+            resultados = []
+
+            for item in resultado:
+                item = list(item)
+                item[0] = converter_data(item[0])
+                item[1] = item[1]
+                resultados.append(item)
+
+            colunas = ['DT Consulta', 'Hr Consulta', 'Médico', 'Paciente']
+
+            tabela = tabulate(resultados, headers=colunas, tablefmt='grid')
+
+            display(tabela)
+
+            input("\nPressione Enter para continuar...")
+
+
+    except Exception as e:
+        print("Erro: ", e)
+
+
+def relatorio_faixa_data(cursor):
+    limpar_tela()
+    data_inicio = converter_data_banco(input("Data inicial(DD/MM/AAAA): "))
+    data_limite = converter_data_banco(input("Data limite(DD/MM/AAAA): "))
+
+    if data_inicio > data_limite:
+        print("Erro: Data inicial posterior a data final.")
+        input("Pressione Enter para encerrar")
+    else:
+        try:
+            sql = '''SELECT CONSULTA.COD_CONSULTA
+                            CONSULTA.DT_CONSULTA,
+                            CONSULTA.HR_CONSULTA,
+                            PACIENTE.NOME,
+                            MEDICO.NOME
+                        FROM CONSULTA                        
+                        WHERE DT_CONSULTA > %s and CONSULTA.DT_CONSULTA < %s
+                        ORDER BY DT_CONSULTA ASC'''
+            cursor.execute(sql, (data_inicio, data_limite))
+            resultado = cursor.fetchall()
+
+            if len(resultado) == 0:
+                print("Erro: Não há consultas marcadas nesta faixa de data.")
+                delay()
+            else:
+                resultados = []
+
+                for item in resultado:
+                    item = list(item)
+                    item[1] = converter_data(item[1])
+                    item[2] = converter_data(item[2])
+                    resultados.append(item)
+
+                colunas = ['DT Consulta', 'Hr Consulta', 'Médico', 'Paciente']
+                tabela = tabulate(resultados, headers=colunas, tablefmt='grid')
+                display(tabela)
+
+                input("\nPressione Enter para continuar...")
+
+
+        except Exception as e:
+            print("Erro: ", e)
+
+
+
+
+
+
+
+
+'''faixa de data
+exibir: Data da Consulta, hora, médico e paciente'''
+
