@@ -260,18 +260,23 @@ def editar_paciente(conexao, cursor):
 
 def relatorio_paciente(cursor):
     try:
-        sql = '''SELECT DISTINCT
+        sql = '''SELECT 
             
-            PACIENTE.NOME AS PACIENTE, 
-            PACIENTE.DT_NASC,
-            PACIENTE.CPF,
-            COUNT(CONSULTA.ID)
+            p.NOME,
+            p.DT_NASC,
+            p.CPF,
+            COUNT(c.ID)
             
-            FROM CONSULTA
+            FROM PACIENTE p
+            
+            INNER JOIN CONSULTA c
+            ON
+                p.ID = c.ID_PACIENTE
+            GROUP BY
+            
+            p.ID, p.NOME, p.DT_NASC, p.CPF
 
-            INNER JOIN PACIENTE ON CONSULTA.ID_PACIENTE = PACIENTE.ID 
-
-            ORDER BY PACIENTE.NOME ASC'''
+            ORDER BY p.NOME ASC'''
         # Inner join: COMPARA 2 TABELAS
         cursor.execute(sql)
         resultado = cursor.fetchall()
@@ -297,13 +302,16 @@ def relatorio_paciente(cursor):
         print("Erro: ", e)
 
 
-'''relatório de pacientes que possuem consultas marcadas
-Relatório deverá trazer na tela:
- - Nome do Paciente
- - Data de Nascimento
- - Código da Consulta
- - Data da Consulta
- - Hora da Consulta
- 
- Em ordem alfabética'''
+def relatorio_paciente_consultas_marcadas(cursor):
+    try:
+        sql = '''SELECT TIMESTAMPDIFF(YEAR, DT_NASC, CURRENT_DATE())
+                 FROM PACIENTE'''
+
+'''Relatório de Pacientes por Idade:
+Fornecer ao usuário a quantidade de pacientes nas seguintes condições:
+- Qtd Pacientes com idade < 18
+- Qtd Pacientes com idade >= 18 e <= 70
+- Qtd Pacientes com idade > 70
+
+só a contagem? COUNT'''
 
