@@ -346,14 +346,16 @@ def relatorio_faixa_data(cursor):
         print("Erro: Data inicial posterior a data final.")
         input("Pressione Enter para encerrar")
     else:
-        try:
-            sql = '''SELECT CONSULTA.COD_CONSULTA
+        try: #chamei o id apesar de n ter mostrado na tabela, porque é minha chave estrangeira da tabela CONSULTA
+            sql = '''SELECT CONSULTA.COD_CONSULTA,
                             CONSULTA.DT_CONSULTA,
                             CONSULTA.HR_CONSULTA,
                             PACIENTE.NOME,
                             MEDICO.NOME
-                        FROM CONSULTA                        
-                        WHERE DT_CONSULTA > %s and CONSULTA.DT_CONSULTA < %s
+                        FROM CONSULTA
+                        INNER JOIN PACIENTE ON CONSULTA.ID_PACIENTE = PACIENTE.ID      
+                        INNER JOIN MEDICO ON CONSULTA.ID_MEDICO = MEDICO.ID                  
+                        WHERE CONSULTA.DT_CONSULTA > %s and DT_CONSULTA < %s
                         ORDER BY DT_CONSULTA ASC'''
             cursor.execute(sql, (data_inicio, data_limite))
             resultado = cursor.fetchall()
@@ -367,7 +369,6 @@ def relatorio_faixa_data(cursor):
                 for item in resultado:
                     item = list(item)
                     item[1] = converter_data(item[1])
-                    item[2] = converter_data(item[2])
                     resultados.append(item)
 
                 colunas = ['DT Consulta', 'Hr Consulta', 'Médico', 'Paciente']
@@ -379,13 +380,6 @@ def relatorio_faixa_data(cursor):
 
         except Exception as e:
             print("Erro: ", e)
-
-
-
-
-
-
-
 
 '''faixa de data
 exibir: Data da Consulta, hora, médico e paciente'''

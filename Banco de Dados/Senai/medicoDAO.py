@@ -490,4 +490,10 @@ def relatorio_status(cursor):
 
 
 
+'''relatório de médicos para pedir todos os médicos por especialidade médica
+mostrar a tabela de especialdiades para o usuario escolher
+exibir: CRM, Nome do Médico, Especialidade (Order by ordenar por nome)'''
 
+'''Relatório por status:
+solicita médicos ativos e inativos
+exibir: CRM, Nome do médico, especialidade e status(Order by ordenar por nome)'''

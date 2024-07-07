@@ -16,5 +16,5 @@ def converter_data(data_original): # YYYY/MM/DD -> DD/MM/YYYY
 
 def converter_data_banco(data_inserida): # DD/MM/YYYY -> YYYY/MM/DD
     data_convertida = datetime.strptime(data_inserida, "%d/%m/%Y")
-    data_formatada = data_convertida.strftime("%Y=%m-%d")
+    data_formatada = data_convertida.strftime("%Y-%m-%d")
     return data_formatada

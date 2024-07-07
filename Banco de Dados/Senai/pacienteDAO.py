@@ -303,15 +303,44 @@ def relatorio_paciente(cursor):
 
 
 def relatorio_paciente_consultas_marcadas(cursor):
+    limpar_tela()
+    infantil = 0
+    adulto = 0
+    senior = 0
     try:
         sql = '''SELECT TIMESTAMPDIFF(YEAR, DT_NASC, CURRENT_DATE())
                  FROM PACIENTE'''
+        cursor.execute(sql)
+        resultado = cursor.fetchall()
 
-'''Relatório de Pacientes por Idade:
-Fornecer ao usuário a quantidade de pacientes nas seguintes condições:
-- Qtd Pacientes com idade < 18
-- Qtd Pacientes com idade >= 18 e <= 70
-- Qtd Pacientes com idade > 70
+        if len(resultado) == 0:
+            print("Não há consultas cadastradas no Sistema!")
+            delay()
 
-só a contagem? COUNT'''
+        else:
+
+            resultados = [] #<--- tive que declarar aqui senão dá erro
+            for item in resultado:
+                idades = item[0] #sempre pega o primeiro e único item conforme percorre a lista
+                if idades < 18:
+                    infantil +=1
+                elif idades >=18 and idades <70:
+                    adulto +=1
+                else:
+                    senior +=1
+                resultados.append(item)
+                resultados = [[infantil, adulto, senior]] #<--chamei aqui dnv..
+
+
+
+    #Tive dificuldade aqui, pois nos exercicios anteriores, a tabela vinha de acordo
+    #Com os campos passados no SQL..
+            colunas = ['Até 18 anos', '18 até 70 anos', 'Acima de 70 anos'] #<----
+            tabela = tabulate(resultados, headers=colunas, tablefmt='grid')
+            display(tabela)
+            input("\nPressione Enter para continuar...")
+
+    except Exception as e:
+        print(f"Erro: {e}")
+
 
